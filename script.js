@@ -6,10 +6,8 @@ async function getNewFact(isInitial = false) {
     const buttons = document.querySelectorAll('button');
 
     try {
-        // Désactiver les boutons pendant le chargement
         buttons.forEach(button => button.disabled = true);
 
-        // Faire la requête API
         const response = await fetch('https://catfact.ninja/fact');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -17,20 +15,16 @@ async function getNewFact(isInitial = false) {
         const data = await response.json();
 
         if (isInitial) {
-            // Mettre à jour les deux faces pour éviter qu'une face reste vide
             currentFact.textContent = data.fact;
             nextFact.textContent = "Click the button for a new fact!";
         } else {
-            // Mettre à jour le fait sur la face cachée
             nextFact.textContent = data.fact;
 
-            // Retourner la carte
             const container = document.querySelector('.card-container');
             isBackVisible = !isBackVisible;
             container.classList.toggle('is-flipped');
         }
 
-        // Réactiver les boutons après l'animation
         setTimeout(() => {
             buttons.forEach(button => button.disabled = false);
         }, 800);
@@ -46,5 +40,4 @@ async function getNewFact(isInitial = false) {
     }
 }
 
-// Charger un premier fait au chargement de la page
 window.onload = () => getNewFact(true);
